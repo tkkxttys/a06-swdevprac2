@@ -23,7 +23,7 @@ export default function ProductCard ( {venueName, imgSrc, onRating} :  {venueNam
                 onChange={(e, value) => { 
                     e.stopPropagation(); 
                     onRating(venueName, value);
-                }} 
+                }}  
             />
 
         </InteractiveCard>

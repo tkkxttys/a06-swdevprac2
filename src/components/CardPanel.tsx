@@ -11,14 +11,13 @@ export default function CardPanel() {
     ]);
 
     const cardReducer = (venueList: Map<string, number>, action: { type: string; venueName: string; rating?: number }) => {
+        const newVenueList = new Map(venueList);
         switch (action.type) {
             case 'increase key-value': {
-                const newVenueList = new Map(venueList);
                 newVenueList.set(action.venueName, action.rating ?? 0);
                 return newVenueList;
             }
             case 'decrease key-value': {
-                const newVenueList = new Map(venueList);
                 newVenueList.delete(action.venueName);
                 return newVenueList;
             }
@@ -29,38 +28,37 @@ export default function CardPanel() {
 
     const [venueList, dispatchRating] = useReducer(cardReducer, defaultVenue);
 
+    const handleRatingChange = (venueName: string, rating: number) => {
+        dispatchRating({ type: 'increase key-value', venueName, rating });
+    };
+
     return(
         <div>
             <div style={{margin: "20px", display:"flex", flexDirection:"row", flexWrap:"wrap", justifyContent:"space-around", alignContent:"space-around"}}>
             <ProductCard 
                 venueName="The Bloom Pavilion" 
                 imgSrc='/img/bloom.jpg'
-                onRating={(venue: string, rating: number) => 
-                    dispatchRating({ type: 'increase key-value', venueName: venue, rating })
-                }
+                onRating={handleRatingChange}
             />
             <ProductCard 
                 venueName="Spark Space" 
                 imgSrc='/img/sparkspace.jpg'
-                onRating={(venue: string, rating: number) => 
-                    dispatchRating({ type: 'increase key-value', venueName: venue, rating })
-                }
+                onRating={handleRatingChange}
             />
             <ProductCard 
                 venueName="The Grand Table" 
                 imgSrc='/img/grandtable.jpg'
-                onRating={(venue: string, rating: number) => 
-                    dispatchRating({ type: 'increase key-value', venueName: venue, rating })
-                }
+                onRating={handleRatingChange}
             />
 
             </div>
             <div className="w-full text-xl font-medium">Compare List: { venueList.size }</div>
-            { Array.from(venueList).map(([venueName, rating]) => (
-                <div key={venueName} onClick={() => dispatchRating({ type: 'decrease key-value', venueName })}>
-                    {venueName} Rating: {rating}
-                </div>
-))}
+            {Array.from(venueList).map(([venueName, rating]) => (
+                    <div data-testid={venueName} key={venueName} className="text-xl"
+                    onClick={()=>dispatchRating({type:'decrease key-value', venueName, rating:0})}>
+                        {venueName} : {rating}
+                    </div>
+            ))}
 
         </div>
         

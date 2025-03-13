@@ -1,8 +1,10 @@
 import Image from 'next/image'
 import InteractiveCard from './InteractiveCard'
 import { Rating } from '@mui/material'
+import {useState} from 'react';
 
 export default function ProductCard ( {venueName, imgSrc, onRating} :  {venueName: string, imgSrc: string, onRating: Function} ) {
+    const  [value, setValue] = useState<number | null>(0);
 
     return (
         <InteractiveCard contentName={venueName}>
@@ -20,10 +22,12 @@ export default function ProductCard ( {venueName, imgSrc, onRating} :  {venueNam
                 name={venueName + " Rating"} 
                 data-testid={venueName + " Rating"} 
                 className='h-[10%] px-2 py-1' 
-                onChange={(e, value) => { 
-                    e.stopPropagation(); 
-                    onRating(venueName, value);
-                }}  
+                value={value}
+                onChange={(event, newValue) => {
+                    event.stopPropagation;
+                    setValue(newValue);
+                    onRating(venueName,newValue);
+                }}
             />
 
         </InteractiveCard>
